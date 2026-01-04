@@ -253,6 +253,36 @@ impl ModelProviderInfo {
     pub fn is_openai(&self) -> bool {
         self.name == OPENAI_PROVIDER_NAME
     }
+
+    pub fn create_openrouter_provider() -> ModelProviderInfo {
+        ModelProviderInfo {
+            name: "OpenRouter".into(),
+            base_url: Some("https://openrouter.ai/api/v1".into()),
+            env_key: Some("OPENROUTER_API_KEY".into()),
+            env_key_instructions: Some(
+                "Get your API key from https://openrouter.ai/settings".into(),
+            ),
+            experimental_bearer_token: None,
+            wire_api: WireApi::Responses,
+            query_params: None,
+            http_headers: Some(
+                [
+                    (
+                        "HTTP-Referer".to_string(),
+                        "https://github.com/openai/codex".into(),
+                    ),
+                    ("X-Title".to_string(), "Codex CLI".into()),
+                ]
+                .into_iter()
+                .collect(),
+            ),
+            env_http_headers: None,
+            request_max_retries: None,
+            stream_max_retries: None,
+            stream_idle_timeout_ms: None,
+            requires_openai_auth: false,
+        }
+    }
 }
 
 pub const DEFAULT_LMSTUDIO_PORT: u16 = 1234;
@@ -265,12 +295,9 @@ pub const OLLAMA_OSS_PROVIDER_ID: &str = "ollama";
 pub fn built_in_model_providers() -> HashMap<String, ModelProviderInfo> {
     use ModelProviderInfo as P;
 
-    // We do not want to be in the business of adjucating which third-party
-    // providers are bundled with Codex CLI, so we only include the OpenAI and
-    // open source ("oss") providers by default. Users are encouraged to add to
-    // `model_providers` in config.toml to add their own providers.
     [
         ("openai", P::create_openai_provider()),
+        ("openrouter", P::create_openrouter_provider()),
         (
             OLLAMA_OSS_PROVIDER_ID,
             create_oss_provider(DEFAULT_OLLAMA_PORT, WireApi::Chat),
@@ -414,6 +441,41 @@ env_http_headers = { "X-Example-Env-Header" = "EXAMPLE_ENV_VAR" }
         };
 
         let provider: ModelProviderInfo = toml::from_str(azure_provider_toml).unwrap();
+        assert_eq!(expected_provider, provider);
+    }
+
+    #[test]
+    fn test_deserialize_openrouter_model_provider_toml() {
+        let openrouter_provider_toml = r#"
+name = "OpenRouter"
+base_url = "https://openrouter.ai/api/v1"
+env_key = "OPENROUTER_API_KEY"
+env_key_instructions = "Get your API key from https://openrouter.ai/settings"
+wire_api = "responses"
+http_headers = { "HTTP-Referer" = "https://github.com/openai/codex", "X-Title" = "Codex CLI" }
+        "#;
+        let expected_provider = ModelProviderInfo {
+            name: "OpenRouter".into(),
+            base_url: Some("https://openrouter.ai/api/v1".into()),
+            env_key: Some("OPENROUTER_API_KEY".into()),
+            env_key_instructions: Some(
+                "Get your API key from https://openrouter.ai/settings".into(),
+            ),
+            experimental_bearer_token: None,
+            wire_api: WireApi::Responses,
+            query_params: None,
+            http_headers: Some(maplit::hashmap! {
+                "HTTP-Referer".to_string() => "https://github.com/openai/codex".to_string(),
+                "X-Title".to_string() => "Codex CLI".to_string(),
+            }),
+            env_http_headers: None,
+            request_max_retries: None,
+            stream_max_retries: None,
+            stream_idle_timeout_ms: None,
+            requires_openai_auth: false,
+        };
+
+        let provider: ModelProviderInfo = toml::from_str(openrouter_provider_toml).unwrap();
         assert_eq!(expected_provider, provider);
     }
 

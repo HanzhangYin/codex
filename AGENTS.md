@@ -109,3 +109,72 @@ If you don’t have the tool:
   let request = mock.single_request();
   // assert using request.function_call_output(call_id) or request.json_body() or other helpers.
   ```
+
+## Adding Model Providers
+
+When adding a new model provider (e.g., OpenRouter, Anthropic, Vertex AI), follow this pattern:
+
+### 1. Add provider function in `model_provider_info.rs`
+
+```rust
+pub fn create_new_provider() -> ModelProviderInfo {
+    ModelProviderInfo {
+        name: "NewProvider".into(),
+        base_url: Some("https://api.newprovider.com/v1".into()),
+        env_key: Some("NEWPROVIDER_API_KEY".into()),
+        env_key_instructions: Some("Get your API key from https://newprovider.com/settings".into()),
+        experimental_bearer_token: None,
+        wire_api: WireApi::Responses, // or WireApi::Chat
+        query_params: None,
+        http_headers: Some([...].into_iter().collect()),
+        env_http_headers: None,
+        request_max_retries: None,
+        stream_max_retries: None,
+        stream_idle_timeout_ms: None,
+        requires_openai_auth: false,
+    }
+}
+```
+
+### 2. Register in `built_in_model_providers()`
+
+```rust
+pub fn built_in_model_providers() -> HashMap<String, ModelProviderInfo> {
+    use ModelProviderInfo as P;
+
+    [
+        ("openai", P::create_openai_provider()),
+        ("openrouter", P::create_openrouter_provider()),
+        // ... other providers
+    ]
+    .into_iter()
+    .map(|(k, v)| (k.to_string(), v))
+    .collect()
+}
+```
+
+### 3. Add test in `model_provider_info.rs`
+
+```rust
+#[test]
+fn test_deserialize_new_provider_toml() {
+    let toml_str = r#"
+name = "NewProvider"
+base_url = "https://api.newprovider.com/v1"
+env_key = "NEWPROVIDER_API_KEY"
+    "#;
+    let provider: ModelProviderInfo = toml::from_str(toml_str).unwrap();
+    assert_eq!(provider.name, "NewProvider");
+}
+```
+
+### 4. Update `docs/config.md`
+
+Add documentation for the new provider with usage examples and recommended models.
+
+### Example: OpenRouter
+
+- File: `codex-rs/core/src/model_provider_info.rs`
+- Wire API: `Responses`
+- Environment variable: `OPENROUTER_API_KEY`
+- Recommended models: `minimax/minimax-m2.1`, `x-ai/grok-code-fast-1`, `mistralai/devstral-2512:free`

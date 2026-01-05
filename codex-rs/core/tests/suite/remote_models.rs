@@ -83,6 +83,7 @@ async fn remote_models_remote_model_uses_unified_exec() -> Result<()> {
         supports_parallel_tool_calls: false,
         context_window: None,
         experimental_supported_tools: Vec::new(),
+        provider: None,
     };
 
     let models_mock = mount_models_once(
@@ -220,6 +221,7 @@ async fn remote_models_apply_remote_base_instructions() -> Result<()> {
         supports_parallel_tool_calls: false,
         context_window: None,
         experimental_supported_tools: Vec::new(),
+        provider: None,
     };
     mount_models_once(
         &server,
@@ -480,5 +482,6 @@ fn test_remote_model(slug: &str, visibility: ModelVisibility, priority: i32) -> 
         supports_parallel_tool_calls: false,
         context_window: None,
         experimental_supported_tools: Vec::new(),
+        provider: None,
     }
 }

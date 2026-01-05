@@ -39,6 +39,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: None,
             show_in_picker: true,
             supported_in_api: false,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5.1-codex-max".to_string(),
@@ -68,6 +69,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: true,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5.1-codex-mini".to_string(),
@@ -90,6 +92,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: true,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5.2".to_string(),
@@ -119,6 +122,47 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: true,
             supported_in_api: true,
+            provider: None,
+        },
+        // OpenRouter models
+        ModelPreset {
+            id: "minimax/minimax-m2.1".to_string(),
+            model: "minimax/minimax-m2.1".to_string(),
+            display_name: "minimax-m2.1".to_string(),
+            description: "Fast, capable coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "mistralai/devstral-2512:free".to_string(),
+            model: "mistralai/devstral-2512:free".to_string(),
+            display_name: "devstral-2512 (free)".to_string(),
+            description: "Free Mistral dev model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "x-ai/grok-code-fast-1".to_string(),
+            model: "x-ai/grok-code-fast-1".to_string(),
+            display_name: "grok-code-fast-1".to_string(),
+            description: "Grok's fast coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
         },
         ModelPreset {
             id: "bengalfox".to_string(),
@@ -148,6 +192,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: None,
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "boomslang".to_string(),
@@ -177,6 +222,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: None,
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         // Deprecated models.
         ModelPreset {
@@ -203,6 +249,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5-codex-mini".to_string(),
@@ -224,6 +271,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5.1-codex".to_string(),
@@ -250,6 +298,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5".to_string(),
@@ -279,6 +328,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
         ModelPreset {
             id: "gpt-5.1".to_string(),
@@ -304,6 +354,7 @@ static PRESETS: Lazy<Vec<ModelPreset>> = Lazy::new(|| {
             upgrade: Some(gpt_52_codex_upgrade()),
             show_in_picker: false,
             supported_in_api: true,
+            provider: None,
         },
     ]
 });

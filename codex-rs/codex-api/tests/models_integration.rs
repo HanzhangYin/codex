@@ -85,6 +85,7 @@ async fn models_client_hits_models_endpoint() {
             supports_parallel_tool_calls: false,
             context_window: None,
             experimental_supported_tools: Vec::new(),
+            provider: None,
         }],
     };
 

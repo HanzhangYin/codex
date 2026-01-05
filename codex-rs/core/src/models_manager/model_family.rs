@@ -122,6 +122,7 @@ impl ModelFamily {
             supports_parallel_tool_calls,
             context_window,
             experimental_supported_tools,
+            provider: _,
         } = model;
 
         self.default_reasoning_effort = Some(default_reasoning_level);
@@ -444,6 +445,7 @@ mod tests {
             supports_parallel_tool_calls: false,
             context_window: None,
             experimental_supported_tools: Vec::new(),
+            provider: None,
         }
     }
 
@@ -531,6 +533,7 @@ mod tests {
             supports_parallel_tool_calls: true,
             context_window: Some(400_000),
             experimental_supported_tools: vec!["alpha".to_string(), "beta".to_string()],
+            provider: None,
         }]);
 
         assert_eq!(

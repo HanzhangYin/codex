@@ -79,6 +79,8 @@ pub struct ModelPreset {
     pub show_in_picker: bool,
     /// whether this model is supported in the api
     pub supported_in_api: bool,
+    /// Provider name for grouping in picker UI (e.g., "OpenAI", "OpenRouter")
+    pub provider: Option<String>,
 }
 
 /// Visibility of a model in the picker or APIs.
@@ -181,6 +183,7 @@ pub struct ModelInfo {
     pub supports_parallel_tool_calls: bool,
     pub context_window: Option<i64>,
     pub experimental_supported_tools: Vec<String>,
+    pub provider: Option<String>,
 }
 
 /// Response wrapper for `/models`.
@@ -212,6 +215,7 @@ impl From<ModelInfo> for ModelPreset {
             }),
             show_in_picker: info.visibility == ModelVisibility::List,
             supported_in_api: info.supported_in_api,
+            provider: info.provider,
         }
     }
 }

@@ -2325,6 +2325,15 @@ impl ChatWidget {
                     model: preset_for_event,
                 });
             })];
+
+            let section = preset.provider.clone().or_else(|| {
+                if preset.model.starts_with("gpt-") || preset.model.starts_with("codex-") {
+                    Some("OpenAI".to_string())
+                } else {
+                    None
+                }
+            });
+
             items.push(SelectionItem {
                 name: preset.display_name.clone(),
                 description,
@@ -2332,6 +2341,7 @@ impl ChatWidget {
                 is_default: preset.is_default,
                 actions,
                 dismiss_on_select: single_supported_effort,
+                section,
                 ..Default::default()
             });
         }

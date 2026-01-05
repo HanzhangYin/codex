@@ -35,6 +35,7 @@ fn preset_to_info(preset: &ModelPreset, priority: i32) -> ModelInfo {
         supports_parallel_tool_calls: false,
         context_window: None,
         experimental_supported_tools: Vec::new(),
+        provider: preset.provider.clone(),
     }
 }
 

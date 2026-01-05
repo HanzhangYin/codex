@@ -44,6 +44,7 @@ pub(crate) struct SelectionItem {
     pub actions: Vec<SelectionAction>,
     pub dismiss_on_select: bool,
     pub search_value: Option<String>,
+    pub section: Option<String>,
 }
 
 pub(crate) struct SelectionViewParams {
@@ -180,47 +181,64 @@ impl ListSelectionView {
     }
 
     fn build_rows(&self) -> Vec<GenericDisplayRow> {
-        self.filtered_indices
-            .iter()
-            .enumerate()
-            .filter_map(|(visible_idx, actual_idx)| {
-                self.items.get(*actual_idx).map(|item| {
-                    let is_selected = self.state.selected_idx == Some(visible_idx);
-                    let prefix = if is_selected { '›' } else { ' ' };
-                    let name = item.name.as_str();
-                    let marker = if item.is_current {
-                        " (current)"
-                    } else if item.is_default {
-                        " (default)"
-                    } else {
-                        ""
-                    };
-                    let name_with_marker = format!("{name}{marker}");
-                    let n = visible_idx + 1;
-                    let wrap_prefix = if self.is_searchable {
-                        // The number keys don't work when search is enabled (since we let the
-                        // numbers be used for the search query).
-                        format!("{prefix} ")
-                    } else {
-                        format!("{prefix} {n}. ")
-                    };
-                    let wrap_prefix_width = UnicodeWidthStr::width(wrap_prefix.as_str());
-                    let display_name = format!("{wrap_prefix}{name_with_marker}");
-                    let description = is_selected
-                        .then(|| item.selected_description.clone())
-                        .flatten()
-                        .or_else(|| item.description.clone());
-                    let wrap_indent = description.is_none().then_some(wrap_prefix_width);
-                    GenericDisplayRow {
-                        name: display_name,
-                        display_shortcut: item.display_shortcut,
-                        match_indices: None,
-                        description,
-                        wrap_indent,
+        let mut rows: Vec<GenericDisplayRow> = Vec::new();
+        let mut current_section: Option<&String> = None;
+
+        for (visible_idx, actual_idx) in self.filtered_indices.iter().enumerate() {
+            if let Some(item) = self.items.get(*actual_idx) {
+                // Add section header if this item has a different section
+                if let Some(ref section) = item.section {
+                    if current_section != Some(section) {
+                        current_section = Some(section);
+                        rows.push(GenericDisplayRow {
+                            name: section.clone(),
+                            display_shortcut: None,
+                            match_indices: None,
+                            description: None,
+                            wrap_indent: None,
+                            section: Some(section.clone()),
+                        });
                     }
-                })
-            })
-            .collect()
+                }
+
+                let is_selected = self.state.selected_idx == Some(visible_idx);
+                let prefix = if is_selected { '›' } else { ' ' };
+                let name = item.name.as_str();
+                let marker = if item.is_current {
+                    " (current)"
+                } else if item.is_default {
+                    " (default)"
+                } else {
+                    ""
+                };
+                let name_with_marker = format!("{name}{marker}");
+                let n = visible_idx + 1;
+                let wrap_prefix = if self.is_searchable {
+                    // The number keys don't work when search is enabled (since we let the
+                    // numbers be used for the search query).
+                    format!("{prefix} ")
+                } else {
+                    format!("{prefix} {n}. ")
+                };
+                let wrap_prefix_width = UnicodeWidthStr::width(wrap_prefix.as_str());
+                let display_name = format!("{wrap_prefix}{name_with_marker}");
+                let description = is_selected
+                    .then(|| item.selected_description.clone())
+                    .flatten()
+                    .or_else(|| item.description.clone());
+                let wrap_indent = description.is_none().then_some(wrap_prefix_width);
+                rows.push(GenericDisplayRow {
+                    name: display_name,
+                    display_shortcut: item.display_shortcut,
+                    match_indices: None,
+                    description,
+                    wrap_indent,
+                    section: None,
+                });
+            }
+        }
+
+        rows
     }
 
     fn move_up(&mut self) {

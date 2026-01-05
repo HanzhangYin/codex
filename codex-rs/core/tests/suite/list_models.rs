@@ -42,7 +42,50 @@ async fn list_models_returns_chatgpt_models() -> Result<()> {
 }
 
 fn expected_models_for_api_key() -> Vec<ModelPreset> {
-    vec![gpt_5_1_codex_max(), gpt_5_1_codex_mini(), gpt_5_2()]
+    vec![
+        gpt_5_1_codex_max(),
+        gpt_5_1_codex_mini(),
+        gpt_5_2(),
+        ModelPreset {
+            id: "minimax/minimax-m2.1".to_string(),
+            model: "minimax/minimax-m2.1".to_string(),
+            display_name: "minimax-m2.1".to_string(),
+            description: "Fast, capable coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "mistralai/devstral-2512:free".to_string(),
+            model: "mistralai/devstral-2512:free".to_string(),
+            display_name: "devstral-2512 (free)".to_string(),
+            description: "Free Mistral dev model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "x-ai/grok-code-fast-1".to_string(),
+            model: "x-ai/grok-code-fast-1".to_string(),
+            display_name: "grok-code-fast-1".to_string(),
+            description: "Grok's fast coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+    ]
 }
 
 fn expected_models_for_chatgpt() -> Vec<ModelPreset> {
@@ -53,6 +96,45 @@ fn expected_models_for_chatgpt() -> Vec<ModelPreset> {
         gpt_5_1_codex_max,
         gpt_5_1_codex_mini(),
         gpt_5_2(),
+        ModelPreset {
+            id: "minimax/minimax-m2.1".to_string(),
+            model: "minimax/minimax-m2.1".to_string(),
+            display_name: "minimax-m2.1".to_string(),
+            description: "Fast, capable coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "mistralai/devstral-2512:free".to_string(),
+            model: "mistralai/devstral-2512:free".to_string(),
+            display_name: "devstral-2512 (free)".to_string(),
+            description: "Free Mistral dev model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
+        ModelPreset {
+            id: "x-ai/grok-code-fast-1".to_string(),
+            model: "x-ai/grok-code-fast-1".to_string(),
+            display_name: "grok-code-fast-1".to_string(),
+            description: "Grok's fast coding model via OpenRouter.".to_string(),
+            default_reasoning_effort: ReasoningEffort::Medium,
+            supported_reasoning_efforts: vec![],
+            is_default: false,
+            upgrade: None,
+            show_in_picker: true,
+            supported_in_api: true,
+            provider: Some("OpenRouter".to_string()),
+        },
     ]
 }
 
@@ -85,6 +167,7 @@ fn gpt_52_codex() -> ModelPreset {
         upgrade: None,
         show_in_picker: true,
         supported_in_api: false,
+        provider: None,
     }
 }
 
@@ -117,6 +200,7 @@ fn gpt_5_1_codex_max() -> ModelPreset {
         upgrade: Some(gpt52_codex_upgrade()),
         show_in_picker: true,
         supported_in_api: true,
+        provider: None,
     }
 }
 
@@ -141,6 +225,7 @@ fn gpt_5_1_codex_mini() -> ModelPreset {
         upgrade: Some(gpt52_codex_upgrade()),
         show_in_picker: true,
         supported_in_api: true,
+        provider: None,
     }
 }
 
@@ -175,6 +260,7 @@ fn gpt_5_2() -> ModelPreset {
         upgrade: Some(gpt52_codex_upgrade()),
         show_in_picker: true,
         supported_in_api: true,
+        provider: None,
     }
 }
 

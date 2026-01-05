@@ -263,7 +263,7 @@ impl ModelProviderInfo {
                 "Get your API key from https://openrouter.ai/settings".into(),
             ),
             experimental_bearer_token: None,
-            wire_api: WireApi::Responses,
+            wire_api: WireApi::Chat,
             query_params: None,
             http_headers: Some(
                 [
@@ -451,7 +451,7 @@ name = "OpenRouter"
 base_url = "https://openrouter.ai/api/v1"
 env_key = "OPENROUTER_API_KEY"
 env_key_instructions = "Get your API key from https://openrouter.ai/settings"
-wire_api = "responses"
+wire_api = "chat"
 http_headers = { "HTTP-Referer" = "https://github.com/openai/codex", "X-Title" = "Codex CLI" }
         "#;
         let expected_provider = ModelProviderInfo {
@@ -462,7 +462,7 @@ http_headers = { "HTTP-Referer" = "https://github.com/openai/codex", "X-Title" =
                 "Get your API key from https://openrouter.ai/settings".into(),
             ),
             experimental_bearer_token: None,
-            wire_api: WireApi::Responses,
+            wire_api: WireApi::Chat,
             query_params: None,
             http_headers: Some(maplit::hashmap! {
                 "HTTP-Referer".to_string() => "https://github.com/openai/codex".to_string(),

@@ -22,6 +22,7 @@ pub(crate) struct GenericDisplayRow {
     pub match_indices: Option<Vec<usize>>, // indices to bold (char positions)
     pub description: Option<String>,       // optional grey text after the name
     pub wrap_indent: Option<usize>,        // optional indent for wrapped lines
+    pub section: Option<String>,           // optional section header
 }
 
 fn line_width(line: &Line<'_>) -> usize {
@@ -242,6 +243,7 @@ pub(crate) fn render_rows(
     // Render items, wrapping descriptions and aligning wrapped lines under the
     // shared description column. Stop when we run out of vertical space.
     let mut cur_y = area.y;
+    let mut current_section: Option<&String> = None;
     for (i, row) in rows_all
         .iter()
         .enumerate()
@@ -250,6 +252,25 @@ pub(crate) fn render_rows(
     {
         if cur_y >= area.y + area.height {
             break;
+        }
+
+        // Render section header if this row has a different section
+        if let Some(ref section) = row.section {
+            if current_section != Some(section) {
+                current_section = Some(section);
+                let section_line = Line::from(section.clone().bold().cyan());
+                let section_area = Rect {
+                    x: area.x,
+                    y: cur_y,
+                    width: area.width,
+                    height: 1,
+                };
+                section_line.render(section_area, buf);
+                cur_y = cur_y.saturating_add(1);
+                if cur_y >= area.y + area.height {
+                    break;
+                }
+            }
         }
 
         let mut full_line = build_full_line(row, desc_col);

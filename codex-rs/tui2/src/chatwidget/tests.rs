@@ -1892,6 +1892,7 @@ async fn single_reasoning_option_skips_selection() {
         upgrade: None,
         show_in_picker: true,
         supported_in_api: true,
+        provider: None,
     };
     chat.open_reasoning_popup(preset);
 

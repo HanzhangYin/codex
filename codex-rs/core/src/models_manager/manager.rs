@@ -367,6 +367,7 @@ mod tests {
             "supports_parallel_tool_calls": false,
             "context_window": null,
             "experimental_supported_tools": [],
+            "provider": null,
         }))
         .expect("valid model")
     }
